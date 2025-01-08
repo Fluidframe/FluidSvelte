@@ -1,4 +1,7 @@
 # Fluidsvelte
+
+![Fluidsvelte-logo](https://indigo-radical-heron-149.mypinata.cloud/ipfs/bafkreicg4yyrp252mj6z54gj5paebker5uf33kktlxzjsrqhywv2ya2dle)
+
 Fluidsvelte is an experimental Python-based full-stack web framework that unifies frontend and backend development using a component-based approach inspired by Svelte to extend developments of Fluidframe. It allows developers to write full-stack components in a single file using Python, HTML, CSS and optional Javascript/Typescript.
 
 
