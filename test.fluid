@@ -1,0 +1,26 @@
+<script type="python">
+from typing import Union, Optional
+
+count: int = State(0)
+squared: Optional[float|int] = State()
+
+def increment():
+    count += 1
+
+def decrement():
+    count -= 1
+
+def square():
+    squared = count**2
+</script>
+
+<button onclick={increment}>Increment</button>
+<p>The count is: {count} and its squared value is {squared}</p>
+<button onclick={decrement}>Decrement</button>
+
+<style>
+p {
+    color: #ffffff;
+    font-size: 1rem;
+}
+</style>
