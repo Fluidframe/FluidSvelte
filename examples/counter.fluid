@@ -1,0 +1,24 @@
+<script type="python">
+
+count: int = State(0)
+
+def increment():
+    nonlocal count
+    count += 1
+
+def decrement():
+    nonlocal count
+    count -= 1
+
+</script>
+
+<button onclick={increment}>Increment</button>
+<p>The count is: {count}</p>
+<button onclick={decrement}>Decrement</button>
+
+<style>
+p {
+    color: #ffffff;
+    font-size: 1rem;
+}
+</style>
