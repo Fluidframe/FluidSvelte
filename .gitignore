@@ -317,3 +317,4 @@ cython_debug/
 ################
 dist/
 app.py
+fluidsvelte/

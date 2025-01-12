@@ -41,8 +41,7 @@ p {
 </style>
 ```
 
-## How to check it out
-
+## How to try it out
 1. Clone the library and install dependencies using astral uv with `uv sync`
 2. create a `.fluid` file for example (currently only supports equivalent of `$state` rune from svelte as `State()` in python parallel with basic data types such as numbers, strings and booleans)
 3. Try running `test.py` file by providing the `.fluid` component name and it will create a `dist/{component}/` folder with compiled `.py` and `.svelte` files.
@@ -64,7 +63,7 @@ Note: When creating reactive `State()` variables use python type annotation form
 2. The Fluid compiler processes these files to generate:
   - Python backend code for business logic
   - Svelte frontend components for UI
-  - Protocol Buffer definitions for type-safe communication (Not implemented)
+  - Protocol Buffer definitions for type-safe communication (Not implemented yet)
 3. Frontend interactions trigger gRPC calls to the backend (currently uses http post requests instead)
 4. State updates are controlled by backend with python logic and state lives in frontend
 
@@ -82,6 +81,53 @@ This project is currently in early experimental development. The core features b
 - State management system
 - gRPC communication layer (http communication layer currently)
 - Code generation for Python and Svelte
+
+
+## CLI commands:
+
+`fluidsvelte create my-project`
+```
+my-project/                      # Root project directory
+  ├── .fluidsvelte/              # Hidden directory for all framework internals
+  │   ├── frontend/              # Compiled Svelte app
+  │   ├── backend/               # Compiled Python backend
+  │   ├── config/                # Framework configuration
+  │   └── app.py                 # Compiled final fastapi App server
+  │
+  ├── src/                       # Main source folder for your application
+  │   ├── lib/                   # Shared code (both Python & Svelte)
+  │   │   ├── components/        # Reusable UI components
+  │   │   │   ├── Header.fluid
+  │   │   │   └── Footer.fluid
+  │   │   │ 
+  │   │   └── server/            # Server-side utilities
+  │   │       └── db.py
+  │   │
+  │   ├── routes/                # All routes following SvelteKit conventions
+  │   │   ├── +page.fluid        # Root page component
+  │   │   ├── +layout.fluid      # Root layout
+  │   │   ├── about/
+  │   │   │   └── +page.fluid
+  │   │   │
+  │   │   └── blog/
+  │   │       ├── +page.fluid
+  │   │       └── +layout.fluid
+  │   │
+  │   ├── app.html               # Main HTML template for the application
+  │   ├── error.html             # Custom error page template
+  │   ├── app.py                 # Optional custom FastAPI server template (setup middlewares)
+  │   └── app.config.py          # App configuration
+  │
+  ├── static/                    # Public assets
+  │   ├── images/                
+  │   └── styles/
+  │
+  ├── .gitignore    
+  ├── .python-version    
+  ├── pyproject.toml
+  ├── README.md
+  └── uv.lock                    
+```
 
 
 ## Future Plans
