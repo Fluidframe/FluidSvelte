@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-message IncrementState {
-    int32 count = 1;
-    oneof squared {
-        int32 int32_squared = 2;
-        float float_squared = 3;
-    }
-}

@@ -20,10 +20,13 @@ FluidSvelte is an experimental Python-based full-stack web framework that unifie
 count: int = State(0)
 
 def increment():
+    nonlocal count
     count += 1
 
 def decrement():
+    nonlocal count
     count -= 1
+
 </script>
 
 <button onclick={increment}>Increment</button>
@@ -38,14 +41,31 @@ p {
 </style>
 ```
 
+## How to check it out
+
+1. Clone the library and install dependencies using astral uv with `uv sync`
+2. create a `.fluid` file for example (currently only supports equivalent of `$state` rune from svelte as `State()` in python parallel with basic data types such as numbers, strings and booleans)
+3. Try running `test.py` file by providing the `.fluid` component name and it will create a `dist/{component}/` folder with compiled `.py` and `.svelte` files.
+4. `compiler.build()` will create an `app.py` backend server which binds the functional routes to the server
+5. Run the generated app.py and use the generated `.svelte` component file within a svelte app as component (will later be combined together to be served completely from python itself)
+
+    For creating a svelte app use `npm` and the following commands:
+    1. `npm create vite@latest <project_name> -- --template svelte`
+    2. `cd <project_name>`
+    3. `npm install`
+    4. Use the fluidsvelte compiler generated `.svelte` file of the component within `App.svelte` and run `npm run dev` as well as `uv run python app.py` running the fastapi backend and see it in action
+
+
+Note: When creating reactive `State()` variables use python type annotation format `variable: annotation = State(default_value)` otherwise compilation won't include such variables.
+
 
 ## How It Works
 1. Write components in `.fluid` files combining Python logic, HTML templates, and CSS styles
 2. The Fluid compiler processes these files to generate:
   - Python backend code for business logic
   - Svelte frontend components for UI
-  - Protocol Buffer definitions for type-safe communication
-3. Frontend interactions trigger gRPC calls to the backend
+  - Protocol Buffer definitions for type-safe communication (Not implemented)
+3. Frontend interactions trigger gRPC calls to the backend (currently uses http post requests instead)
 4. State updates are controlled by backend with python logic and state lives in frontend
 
 
@@ -60,7 +80,7 @@ p {
 This project is currently in early experimental development. The core features being implemented are:
 - Basic component compiler
 - State management system
-- gRPC communication layer
+- gRPC communication layer (http communication layer currently)
 - Code generation for Python and Svelte
 
 

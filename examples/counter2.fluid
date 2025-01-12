@@ -1,0 +1,32 @@
+<script type="python">
+
+count: int = State(0)
+increment_clicked: int = State()
+decrement_clicked: int = State()
+
+def increment():
+    nonlocal count, increment_clicked
+    count += 1
+    if increment_clicked is None:
+        increment_clicked = 0
+    increment_clicked += 1
+
+def decrement():
+    nonlocal count, decrement_clicked
+    count -= 1
+    if decrement_clicked is None:
+        decrement_clicked = 0
+    decrement_clicked += 1
+
+</script>
+
+<button onclick={increment}>Increment (clicked: {increment_clicked} {increment_clicked>1? 'times':'time'})</button>
+<p>The count is: {count}</p>
+<button onclick={decrement}>Decrement (clicked: {decrement_clicked} {decrement_clicked>1? 'times':'time'})</button>
+
+<style>
+p {
+    color: #ffffff;
+    font-size: 1rem;
+}
+</style>
