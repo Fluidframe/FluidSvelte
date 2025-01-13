@@ -65,7 +65,7 @@ class TypeExtractor(ast.NodeVisitor):
 class FluidParser:
     def __init__(self):
         self.script_pattern = re.compile(
-            r'<script(?:\s+type="([^"]*)")?\s*>(.*?)</script>',
+            r'<script(?:\s+lang="([^"]*)")?\s*>(.*?)</script>',
             re.DOTALL
         )
         self.style_pattern = re.compile(
@@ -86,7 +86,7 @@ class FluidParser:
             parsed.script = script_content
             parsed.script_type = script_type
 
-            if script_type == "python":
+            if script_type == "py":
                 try:
                     parsed.script_ast = ast.parse(script_content)
                 except SyntaxError as e:

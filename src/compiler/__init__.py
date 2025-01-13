@@ -26,7 +26,7 @@ class FluidCompiler:
         # Parse the fluid file
         parsed = self.parser.parse_file(file_path)
         
-        if parsed.script_type == "python":
+        if parsed.script_type == "py":
             # Extract state and functions
             state_vars = self.parser.extract_state_variables(parsed.script_ast)
             functions = self.parser.extract_functions(parsed.script_ast)

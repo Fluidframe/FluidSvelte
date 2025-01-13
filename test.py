@@ -8,4 +8,4 @@ compiler = FluidCompiler(
 compiler.compile_file("examples/counter2.fluid")
 compiler.build()
 
-create_project("fluidsvelte")
+# create_project("fluidsvelte")

@@ -1,4 +1,4 @@
-<script type="python">
+<script lang="py">
 
 count: int = State(0)
 

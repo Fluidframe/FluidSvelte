@@ -16,7 +16,7 @@ FluidSvelte is an experimental Python-based full-stack web framework that unifie
 
 ## Example Component
 ```fluid
-<script type="python">
+<script lang="py">
 count: int = State(0)
 
 def increment():
