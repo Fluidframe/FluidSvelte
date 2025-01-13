@@ -10,3 +10,6 @@ dependencies = [
     "fastapi>=0.115.6",
     "uvicorn>=0.34.0",
 ]
+
+[tool.uv.workspace]
+members = ["test/test", "test"]

@@ -85,7 +85,7 @@ This project is currently in early experimental development. The core features b
 
 ## CLI commands:
 
-`fluidsvelte create my-project`
+`fluidsvelte init my-project`
 ```
 my-project/                      # Root project directory
   ├── .fluidsvelte/              # Hidden directory for all framework internals
@@ -132,3 +132,47 @@ my-project/                      # Root project directory
 
 ## Future Plans
 Once stability is achieved, Fluidframe will follows this kind of application behaviour.
+
+my-project/              # Root project directory
+  ├── fluidsvelte/           # directory for all framework internals
+  │   ├── build/                 # Folder created after build
+  │   │   ├── client/                # Compiled Svelte app
+  │   │   ├── server/                # Compiled Python backend
+  │   │   ├── config/                # Framework configuration
+  │   │   └── app.py                 # Compiled final fastapi App server
+  │   │
+  │   ├── node_modules/
+  │   ├── public/
+  │   ├── src/
+  │   ├── index.html
+  │   ├── jsconfig.json
+  │   ├── package-lock.json
+  │   ├── package.json
+  │   ├── svelte.config.js
+  │   └── vite.config.js
+  │
+  ├── src/                       # Main source folder for your application
+  │   ├── lib/                   # Shared code (both Python & Svelte)
+  │   │   ├── components/        # Reusable UI components
+  │   │   │   ├── Header.fluid
+  │   │   │   └── Footer.fluid
+  │   │   │
+  │   │   └── server/            # Server-side utilities
+  │   │
+  │   ├── routes/                # All routes following SvelteKit conventions
+  │   │   └── +page.fluid        # Root page component
+  │   │
+  │   ├── app.py
+  │   ├── app.fluid
+  │   ├── error.fluid
+  │   └── fluidsvelte_config.py  # Fluidframe configuration
+  │
+  └── assets/                    # Public assets
+  │   ├── images/                
+  │   └── styles/
+  │
+  ├── .gitignore    
+  ├── .python-version    
+  ├── pyproject.toml
+  ├── README.md
+  └── uv.lock 

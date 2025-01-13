@@ -1,5 +1,5 @@
 from src.compiler import FluidCompiler
-from src.utils.file_utils import create_project
+from src.utils.file_utils import create_project, init_project
 
 compiler = FluidCompiler(
     output_dir="dist",
@@ -8,4 +8,9 @@ compiler = FluidCompiler(
 compiler.compile_file("examples/counter2.fluid")
 compiler.build()
 
-# create_project("fluidsvelte")
+init_project(
+    project_name="test",
+    source_dir="src",
+    static_dir="assets",
+    fluidsvelte_dir="fluidpack"
+)
