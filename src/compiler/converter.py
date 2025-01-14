@@ -1,5 +1,5 @@
 import ast
-from typing import List, Tuple
+from typing import List
 
 
 class PyToJSConverter:
@@ -104,9 +104,9 @@ class PyToJSConverter:
                         js_lines.append(f"let {target} = $derived({expr});")
         
         return js_lines
-    
-    
+
 if __name__ == "__main__":
+
     def convert_python_to_js(python_code: str) -> str:
         converter = PyToJSConverter()
         js_lines = converter.convert_to_js(python_code)
@@ -120,3 +120,4 @@ if __name__ == "__main__":
     assert convert_python_to_js("""config: dict = State({"name": message, "age": 30})""") == "let config = $state({name: message, age: 30});"
     assert convert_python_to_js("""numbers: tuple = State((1, 2, 3))""") == "let numbers = $state([1, 2, 3]);"
     assert convert_python_to_js("""unique_nums: set = State({1, 2, 3})""") == "let unique_nums = $state(new Set([1, 2, 3]));"
+    

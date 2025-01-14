@@ -1,47 +1,19 @@
 import re, ast, os
 from dataclasses import dataclass
+from src.compiler.converter import PyToJSConverter
 from typing import Optional, Dict, Any, Union, List
-
-
-@dataclass
-class ParsedSection:
-    script: Optional[str] = None
-    script_type: Optional[str] = None  # "python" or None for regular Svelte
-    script_ast: Optional[ast.AST] = None
-    template: Optional[str] = None
-    style: Optional[str] = None
+from src.compiler.schema import ParsedSection, ScriptSection
 
 
 class TypeExtractor(ast.NodeVisitor):
-    PROTO_TYPE_MAP = {
-        'int': 'int32',
-        'float': 'float',
-        'str': 'string',
-        'bool': 'bool',
-        'bytes': 'bytes',
-        'List': 'repeated',
-        'Dict': 'map',
-        'Any': 'google.protobuf.Any',
-        'datetime': 'google.protobuf.Timestamp',
-        'Decimal': 'string',
-    }
-
-    def get_proto_type(self, type_str: str) -> str:
-        return self.PROTO_TYPE_MAP.get(type_str, type_str)
-
-    def process_union_types(self, types: List[str]) -> List[str]:
-        """Process and normalize union types"""
-        return [self.get_proto_type(t.strip()) for t in types]
-
     def get_type_str(self, node) -> Union[str, List[str]]:
         if node is None:
-            return "google.protobuf.Any"
+            return "any"
             
         if isinstance(node, ast.Name):
-            return self.get_proto_type(node.id)
+            return node.id
             
         elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.BitOr):
-            # Handle type unions with | operator
             types = []
             current = node
             while isinstance(current, ast.BinOp) and isinstance(current.op, ast.BitOr):
@@ -54,12 +26,10 @@ class TypeExtractor(ast.NodeVisitor):
             value = self.get_type_str(node.value)
             if isinstance(node.value, ast.Name) and node.value.id == 'Optional':
                 slice_type = self.get_type_str(node.slice)
-                if isinstance(slice_type, list):  # Optional[Union[...]]
-                    return slice_type
-                return [slice_type]
+                return slice_type if isinstance(slice_type, list) else [slice_type]
             return value
 
-        return "google.protobuf.Any"
+        return "any"
 
 
 class FluidParser:
@@ -74,34 +44,41 @@ class FluidParser:
         )
 
     def parse_file(self, file_path: str) -> ParsedSection:
-        with open(file_path, 'r') as f:
-            content = f.read()
-        
         parsed = ParsedSection()
-        
-        script_match = self.script_pattern.search(content)
-        if script_match:
-            script_type = script_match.group(1)
-            script_content = script_match.group(2).strip()
-            parsed.script = script_content
-            parsed.script_type = script_type
-
-            if script_type == "py":
-                try:
-                    parsed.script_ast = ast.parse(script_content)
-                except SyntaxError as e:
-                    raise ValueError(f"Invalid Python syntax in script: {e}")
-
-        style_match = self.style_pattern.search(content)
-        if style_match:
-            parsed.style = style_match.group(1).strip()
-
-        template = content
-        template = self.script_pattern.sub('', template)
-        template = self.style_pattern.sub('', template)
-        parsed.template = template.strip()
-
-        return parsed
+        try:
+            with open(file_path, 'r') as f:
+                content = f.read()
+                
+            # Extract all sections
+            for script_match in self.script_pattern.finditer(content):
+                lang = script_match.group(1) or "js"
+                script_content = script_match.group(2).strip()
+                
+                script_section = ScriptSection(content=script_content, lang=lang)
+                
+                if lang == "py":
+                    try:
+                        script_section.AST = ast.parse(script_content)
+                        # Store Python AST specifically
+                        parsed.script_ast = script_section.AST
+                    except SyntaxError as e:
+                        raise ValueError(f"Invalid Python syntax: {e}")
+                
+                parsed.scripts.append(script_section)
+            
+            # Extract style and template
+            if style_match := self.style_pattern.search(content):
+                parsed.style = style_match.group(1).strip()
+            
+            # Extract template last to avoid interference
+            template = content
+            template = self.script_pattern.sub('', template)
+            template = self.style_pattern.sub('', template)
+            parsed.template = template.strip()
+            
+            return parsed
+        except Exception as e:
+            raise ValueError(f"Failed to parse {file_path}: {str(e)}")
 
     def extract_state_variables(self, ast_tree: ast.AST) -> List[Dict]:
         state_vars = []
@@ -138,6 +115,22 @@ class FluidParser:
 
         StateVisitor().visit(ast_tree)
         return state_vars
+    
+    def extract_derived_variables(self, ast_tree: ast.AST) -> List[Dict]:
+        derived_vars = []
+        js_converter = PyToJSConverter()
+        
+        for node in ast.walk(ast_tree):
+            if (isinstance(node, ast.AnnAssign) and 
+                isinstance(node.value, ast.Call) and
+                isinstance(node.value.func, ast.Name) and 
+                node.value.func.id == 'Derived'):
+                
+                derived_vars.append({
+                    'name': node.target.id,
+                    'expression': js_converter.parse_expression(node.value.args[0])
+                })
+        return derived_vars
 
     def extract_functions(self, ast_tree: ast.AST) -> list:
         functions = []
@@ -169,7 +162,7 @@ class FluidParser:
 
         FunctionVisitor().visit(ast_tree)
         return functions
-    
+
     
 if __name__ == "__main__":
     

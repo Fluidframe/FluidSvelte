@@ -99,71 +99,23 @@ FluidSvelte/
 │   │   ├── __init__.py
 │   │   ├── parser.py
 │   │   └── generator/
+│   │       ├── __init__.py
 │   │       ├── python.py
 │   │       └── svelte.py
 │   ├── runtime/
-│   │   └── server.py
 │   └── utils/
 │       ├── __init__.py
-│       ├── py_to_js.py
 │       └── file_utils.py
 ├── examples/
 └── tests/
 ```
 
 
-How a fluidsvelte project folder looks like:
-```
-my-project/              # Root project directory
-  ├── fluidsvelte/           # directory for all framework internals
-  │   ├── build/                 # Folder created after build
-  │   │   ├── client/                # Compiled Svelte app
-  │   │   ├── server/                # Compiled Python backend
-  │   │   ├── config/                # Framework configuration
-  │   │   └── app.py                 # Compiled final fastapi App server
-  │   │
-  │   ├── node_modules/
-  │   ├── public/
-  │   ├── src/
-  │   ├── index.html
-  │   ├── jsconfig.json
-  │   ├── package-lock.json
-  │   ├── package.json
-  │   ├── svelte.config.js
-  │   └── vite.config.js
-  │
-  ├── src/                       # Main source folder for your application
-  │   ├── lib/                   # Shared code (both Python & Svelte)
-  │   │   ├── components/        # Reusable UI components
-  │   │   │   ├── Header.fluid
-  │   │   │   └── Footer.fluid
-  │   │   │
-  │   │   └── server/            # Server-side utilities
-  │   │
-  │   ├── routes/                # All routes following SvelteKit conventions
-  │   │   └── +page.fluid        # Root page component
-  │   │
-  │   ├── app.py
-  │   ├── app.fluid
-  │   ├── error.fluid
-  │   └── fluidsvelte_config.py  # Fluidframe configuration
-  │
-  └── assets/                    # Public assets
-  │   ├── images/                
-  │   └── styles/
-  │
-  ├── .gitignore    
-  ├── .python-version    
-  ├── pyproject.toml
-  ├── README.md
-  └── uv.lock 
-```
-
 Current Focus:
 1. Stable core compilation pipeline
-2. Basic state management
+2. Basic state management support of `$state` rune
 3. FastAPI integration
 4. Svelte component generation
-5. Support for other svelte runes
+5. Support for other svelte runes like `$derived`
 
 The project aims to provide a seamless development experience where developers can write both backend and frontend logic in a single file while leveraging the best features of both Python and JavaScript ecosystems.

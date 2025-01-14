@@ -1,6 +1,7 @@
 <script lang="py">
 
 count: int = State(0)
+doubled: int = Derived(count*2)
 
 def increment():
     nonlocal count
@@ -12,8 +13,13 @@ def decrement():
 
 </script>
 
+<script lang="js">
+$inspect(count);
+</script>
+
 <button onclick={increment}>Increment</button>
 <p>The count is: {count}</p>
+<p>Double of the count is {doubled}</p>
 <button onclick={decrement}>Decrement</button>
 
 <style>

@@ -20,6 +20,8 @@ def decrement():
 
 </script>
 
+<input type="text" bind:value={count}>
+
 <button onclick={increment}>Increment (clicked: {increment_clicked} {increment_clicked>1? 'times':'time'})</button>
 <p>The count is: {count}</p>
 <button onclick={decrement}>Decrement (clicked: {decrement_clicked} {decrement_clicked>1? 'times':'time'})</button>
