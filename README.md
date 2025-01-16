@@ -17,7 +17,9 @@ FluidSvelte is an experimental Python-based full-stack web framework that unifie
 ## Example Component
 ```fluid
 <script lang="py">
+# write python logic and variables could be even shared between languages
 count: int = State(0)
+doubled: int = Derived(count*2)
 
 def increment():
     nonlocal count
@@ -29,8 +31,14 @@ def decrement():
 
 </script>
 
+<script>
+// allows to write javascript 
+$inspect(count);
+</script>
+
 <button onclick={increment}>Increment</button>
 <p>The count is: {count}</p>
+<p>Double of the count is {doubled}</p>
 <button onclick={decrement}>Decrement</button>
 
 <style>

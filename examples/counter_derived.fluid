@@ -13,7 +13,7 @@ def decrement():
 
 </script>
 
-<script lang="js">
+<script>
 $inspect(count);
 </script>
 
